@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./App.css";
 import { invoke } from "@tauri-apps/api/tauri";
 
@@ -6,7 +6,7 @@ function App() {
 	const [imageSrc, setImageSrc] = useState("");
 	const [scale, setScale] = useState(1);
 	const [pos, setPos] = useState({ x: 0, y: 0 });
-	const [posOnClick, setPosOnClick] = useState({ x: 0, y: 0 });
+	const imageRef = useRef<HTMLImageElement>(null);
 
 	async function loadImage() {
 		try {
@@ -29,16 +29,12 @@ function App() {
 		console.log(scale);
 	}
 
-	function onMouseDown(event: React.MouseEvent<HTMLImageElement>) {
-		setPosOnClick({ x: event.clientX, y: event.clientY });
-	}
-
-	function onMouseUp(event: React.MouseEvent<HTMLImageElement>) {
-		const newPos = {
-			x: pos.x + event.clientX - posOnClick.x,
-			y: pos.y + event.clientY - posOnClick.y,
-		};
-		setPos(newPos);
+	function onMove(event: React.MouseEvent<HTMLImageElement, MouseEvent>) {
+		if (event.buttons !== 1) return;
+		const x = event.clientX - pos.x;
+		const y = event.clientY - pos.y;
+		imageRef.current!.style.transform = `translate(${x}px, ${y}px)`;
+		setPos({ x, y });
 	}
 
 	useEffect(() => {
@@ -49,13 +45,15 @@ function App() {
 		<div>
 			{imageSrc ? (
 				<img
+					ref={imageRef}
 					onWheel={onScroll}
 					width={100 * scale + "%"}
 					src={imageSrc}
 					alt="Loaded"
-					style={{ transform: `translate(${pos.x}, ${pos.y})` }}
-					onMouseDown={onMouseDown}
-					onMouseUp={onMouseUp}
+					onMouseDown={event => {
+						setPos({ x: event.clientX, y: event.clientY });
+					}}
+					onMouseMove={onMove}
 				/>
 			) : (
 				<p>Loading...</p>
