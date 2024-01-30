@@ -8,7 +8,6 @@
 img {
 	transition: all 0.15s ease;
 	-webkit-user-drag: none;
-	user-drag: none;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
