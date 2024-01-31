@@ -9,6 +9,8 @@ const Draggable: FC<DraggableProps> = ({ children }) => {
 		event: React.MouseEvent<HTMLImageElement, MouseEvent>
 	) {
 		if (event.buttons !== 1) return;
+
+		if (lastPos.x === 0 && lastPos.y === 0) return;
 		const x = pos.x + event.clientX - lastPos.x;
 		const y = pos.y + event.clientY - lastPos.y;
 		translateRef.current!.style.transform = `translate(${x}px, ${y}px)`;
@@ -22,10 +24,15 @@ const Draggable: FC<DraggableProps> = ({ children }) => {
 		setLastPos({ x: event.clientX, y: event.clientY });
 	}
 
+	function onMouseUp() {
+		setLastPos({ x: 0, y: 0 });
+	}
+
 	return (
 		<div
 			onMouseMove={onMouseMove}
 			onMouseDown={onMouseDown}
+			onMouseUp={onMouseUp}
 			ref={translateRef}>
 			{children}
 		</div>
