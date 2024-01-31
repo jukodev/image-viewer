@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { invoke } from "@tauri-apps/api/tauri";
 import Draggable from "./components/Draggable";
-import MainImage from "./components/Image";
+import MainImage from "./components/MainImage";
 
 function App() {
 	const [imageSrc, setImageSrc] = useState("");
