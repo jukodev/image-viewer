@@ -12,4 +12,5 @@ img {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	max-width: 1000% !important;
 }
