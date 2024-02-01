@@ -3,10 +3,12 @@ import "./App.css";
 import { invoke } from "@tauri-apps/api/tauri";
 import Draggable from "./components/Draggable";
 import MainImage from "./components/MainImage";
+import { Slider } from "./components/ui/slider";
 
 function App() {
 	const [imageSrc, setImageSrc] = useState("");
 	const [error, setError] = useState(false);
+	const [scale, setScale] = useState(1);
 
 	async function loadImage() {
 		try {
@@ -27,17 +29,37 @@ function App() {
 		});
 	}, []);
 
+	useEffect(() => {
+		console.log("scale", scale);
+	}, [scale]);
+
 	return (
 		<>
 			{(error && <h2>Failed to load image</h2>) || (
 				<Draggable>
 					{imageSrc ? (
-						<MainImage imageSrc={imageSrc} />
+						<MainImage
+							scale={scale}
+							setScale={val => {
+								setScale(val);
+								console.log("val", val);
+							}}
+							imageSrc={imageSrc}
+						/>
 					) : (
 						<p>Loading...</p>
 					)}
 				</Draggable>
 			)}
+			<Slider
+				defaultValue={[1]}
+				value={[scale]}
+				max={10}
+				step={0.05}
+				min={0.05}
+				className="absolute bottom-0 right-0 w-1/4 mx-4 mb-4"
+				onValueChange={val => setScale(val[0])}
+			/>
 		</>
 	);
 }

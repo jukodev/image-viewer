@@ -1,31 +1,31 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 
 const MainImage: FC<ImageProps> = (props: ImageProps) => {
-	const [scale, setScale] = useState(1);
-
 	function onScroll(event: React.WheelEvent<HTMLImageElement>) {
-		if (event.deltaY < 0) {
-			setScale(scale => scale + 0.05);
-		} else if (event.deltaY > 0) {
-			setScale(scale => scale - 0.05);
-		}
+		let newScale = props.scale + event.deltaY / -2000;
 
-		setScale(scale => Math.max(0.05, scale));
-		setScale(scale => Math.min(10, scale));
+		newScale = Math.max(0.05, newScale);
+		newScale = Math.min(10, newScale);
+		props.setScale(newScale);
 	}
 
 	return (
-		<img
-			onWheel={onScroll}
-			width={100 * scale + "%"}
-			src={props.imageSrc}
-			alt="Loaded"
-		/>
+		<>
+			<img
+				onWheel={onScroll}
+				width={100 * props.scale + "%"}
+				max-width="1000%"
+				src={props.imageSrc}
+				alt="Loaded"
+			/>
+		</>
 	);
 };
 
 type ImageProps = {
 	imageSrc: string;
+	scale: number;
+	setScale: (scale: number) => void;
 };
 
 export default MainImage;
