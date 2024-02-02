@@ -4,15 +4,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import Draggable from "./components/Draggable";
 import MainImage from "./components/MainImage";
 import { Slider } from "./components/ui/slider";
-import {
-	Menubar,
-	MenubarMenu,
-	MenubarTrigger,
-	MenubarContent,
-	MenubarItem,
-	MenubarSeparator,
-} from "./components/ui/menubar";
-import { MenubarShortcut } from "./components/ui/menubar";
+import { Menubar } from "./components/Menubar";
 
 function App() {
 	const [imageSrc, setImageSrc] = useState("");
@@ -56,37 +48,7 @@ function App() {
 					)}
 				</Draggable>
 			)}
-			<Menubar className="absolute top-0 left-0">
-				<MenubarMenu>
-					<MenubarTrigger>File</MenubarTrigger>
-					<MenubarContent>
-						<MenubarItem>
-							New Tab <MenubarShortcut>STRG+T</MenubarShortcut>
-						</MenubarItem>
-						<MenubarItem>New Window</MenubarItem>
-						<MenubarSeparator />
-						<MenubarItem>Share</MenubarItem>
-						<MenubarSeparator />
-						<MenubarItem>Print</MenubarItem>
-					</MenubarContent>
-				</MenubarMenu>
-				<MenubarMenu>
-					<MenubarTrigger>Edit</MenubarTrigger>
-					<MenubarContent>
-						<MenubarItem onClick={() => setScale(1)}>
-							Reset Zoom
-						</MenubarItem>
-					</MenubarContent>
-				</MenubarMenu>
-				<MenubarMenu>
-					<MenubarTrigger>Convert</MenubarTrigger>
-					<MenubarContent>
-						<MenubarItem>To PNG</MenubarItem>
-						<MenubarItem>To JPEG</MenubarItem>
-						<MenubarItem>To WEBP</MenubarItem>
-					</MenubarContent>
-				</MenubarMenu>
-			</Menubar>
+			<Menubar />
 			<Slider
 				defaultValue={[1]}
 				value={[scale]}
