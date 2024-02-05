@@ -1,52 +1,38 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{App, Manager, PhysicalSize};
+use std::sync::Mutex;
+mod setup;
+mod commands;
+
 use image;
 use image::GenericImageView;
-
+use tauri::{App, Manager, PhysicalSize};
 fn main() {
-  tauri::Builder::default()
-  .setup(|app| {
-            set_window_size(app);
-            Ok(())
-        })
-  .invoke_handler(tauri::generate_handler![read_image])
-    .run(tauri::generate_context!())
-    .expect("error while running tauri application");
-}
-
-#[tauri::command]
-fn read_image() -> Result<String, String> {
-    let file_path = get_image_from_args();
-    match std::fs::read(file_path) {
-        
-        Ok(bytes) => {
-            let base64_encoded = base64::encode(bytes);
-            Ok(format!("data:image/png;base64,{}", base64_encoded))
-        }
-        Err(e) => Err(e.to_string()),
-    }
-}
-
-fn get_image_from_args() -> String {
-    let args: Vec<String> = std::env::args().collect();
-    let file_path: String;
-    if args.len() < 2 {
-        file_path = "C:\\Users\\theju\\Pictures\\ergohai.jpg".to_string();  
-        //return Err("No file path provided".to_string()); for testing
-    }else{
-        file_path = args[1].clone();
-    
-    }
-    return file_path;
+    tauri::Builder::default()
+    .setup(|app| {
+                        set_window_size(app);
+                        Ok(())
+                })
+    .manage(AppState {
+            file_paths: Mutex::new(setup::get_file_paths()),
+            index: Mutex::new(setup::get_start_index()),
+    })
+    .invoke_handler(tauri::generate_handler![commands::next_image, commands::read_image, commands::prev_image])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }
 
 fn set_window_size(app: &mut App) {
     if let Some(window) = app.get_window("main") {
-        let file_path = get_image_from_args();
+        let file_path = setup::get_image_from_args();
         let img = image::open(file_path).unwrap();
         let (width, height) = img.dimensions();
         window.set_size(PhysicalSize::new(width, height)).unwrap();
     }
+}
+
+pub struct AppState {
+    file_paths: Mutex<Vec<String>>,
+    index: Mutex<usize>,
 }
