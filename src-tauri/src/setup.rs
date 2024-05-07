@@ -19,7 +19,7 @@ pub fn get_file_paths() -> Vec<String> {
     let file_path = get_image_from_args();
     let directory = Path::new(&file_path).parent().unwrap();
     let mut file_paths: Vec<String> = Vec::new();
-    let extensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+    let extensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "JPEG", "JPG", "PNG", "GIF", "BMP", "WEBP"];
     match std::fs::read_dir(directory) {
         Ok(entries) => {
             for entry in entries {
