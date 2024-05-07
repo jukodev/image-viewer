@@ -1,3 +1,4 @@
+import { FC } from "react";
 import {
 	MenubarMenu,
 	MenubarTrigger,
@@ -8,7 +9,11 @@ import {
 	Menubar as MB,
 } from "./ui/menubar";
 
-const Menubar = () => {
+type MenubarProps = {
+	onResetZoom: () => void;
+};
+
+const Menubar: FC<MenubarProps> = ({ onResetZoom }) => {
 	return (
 		<MB className="absolute top-0 left-0">
 			<MenubarMenu>
@@ -27,7 +32,7 @@ const Menubar = () => {
 			<MenubarMenu>
 				<MenubarTrigger>Edit</MenubarTrigger>
 				<MenubarContent>
-					<MenubarItem>Reset Zoom</MenubarItem>
+					<MenubarItem onClick={onResetZoom}>Reset Zoom</MenubarItem>
 				</MenubarContent>
 			</MenubarMenu>
 			<MenubarMenu>

@@ -41,7 +41,7 @@ const Draggable: FC<DraggableProps> = ({ children }) => {
 
 export default Draggable;
 
-type DraggableProps = {
+export type DraggableProps = {
 	children: React.ReactNode;
 };
 

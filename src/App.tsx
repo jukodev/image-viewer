@@ -22,28 +22,30 @@ function App() {
 			setError(true);
 		}
 	}
-
-	function handleKeyPress(e: KeyboardEvent) {
-		if (e.key === "ArrowRight" && !e.repeat) {
-			changeImage("next_image");
-		} else if (e.key === "ArrowLeft" && !e.repeat) {
-			changeImage("prev_image");
-		}
-	}
-
-	async function changeImage(command: string) {
-		try {
-			const base64Image: React.SetStateAction<string> = await invoke(
-				command
-			);
-			setImageSrc(base64Image);
-		} catch (error) {
-			console.error("Failed to load image", error);
-			setError(true);
-		}
+	function resetZoom() {
+		setScale(1);
 	}
 
 	useEffect(() => {
+		function handleKeyPress(e: KeyboardEvent) {
+			if (e.key === "ArrowRight" && !e.repeat) {
+				changeImage("next_image");
+			} else if (e.key === "ArrowLeft" && !e.repeat) {
+				changeImage("prev_image");
+			}
+		}
+		async function changeImage(command: string) {
+			try {
+				const base64Image: React.SetStateAction<string> = await invoke(
+					command
+				);
+				setImageSrc(base64Image);
+			} catch (error) {
+				console.error("Failed to load image", error);
+				setError(true);
+			}
+		}
+
 		loadImage();
 		window.addEventListener("wheel", event => event.preventDefault(), {
 			passive: false,
@@ -69,7 +71,7 @@ function App() {
 					)}
 				</Draggable>
 			)}
-			<Menubar />
+			<Menubar onResetZoom={resetZoom} />
 			<Slider
 				defaultValue={[1]}
 				value={[scale]}

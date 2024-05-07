@@ -6,7 +6,7 @@ pub fn get_image_from_args() -> String {
     let args: Vec<String> = std::env::args().collect();
     let file_path: String;
     if args.len() < 2 {
-        file_path = "C:\\Users\\theju\\Pictures\\ergohai.jpg".to_string();  
+        file_path = "C:\\Users\\theju\\Pictures\\test\\ergohai.jpg".to_string();  
         //return Err("No file path provided".to_string()); for testing
     }else{
         file_path = args[1].clone();
